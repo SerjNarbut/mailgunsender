@@ -16,11 +16,25 @@ namespace MailgunSender.Config
             set { this["enable"] = value; }
         }
 
+        [ConfigurationProperty("type", IsRequired = true)]
+        public string Type
+        {
+            get { return (string)this["type"]; }
+            set { this["type"] = value; }
+        }
+
         [ConfigurationProperty("smtp")]
         public MailgunSmtpElement Smtp
         {
             get { return (MailgunSmtpElement)this["smtp"]; }
             set { this["smtp"] = value; }
+        }
+
+        [ConfigurationProperty("http")]
+        public MailgunHttpElement Http
+        {
+            get { return (MailgunHttpElement)this["http"]; }
+            set { this["http"] = value; }
         }
     }
 }
