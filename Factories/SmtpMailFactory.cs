@@ -1,4 +1,5 @@
 ﻿using MailgunSender.Config;
+using MailgunSender.MailSenders;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -27,7 +28,7 @@ namespace MailgunSender.Factories
 
         public IMailSender CreateSender()
         {
-            var sender = new MailSender();
+            var sender = new SmtpMailSender();
             sender.Client = new System.Net.Mail.SmtpClient(Host, Port);
             sender.Client.EnableSsl = true;
             sender.Client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;

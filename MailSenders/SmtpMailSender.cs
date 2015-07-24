@@ -18,13 +18,13 @@ namespace MailgunSender.MailSenders
             set { this.client = value; }
         }
 
-        public void SendMail(BaseMail mail)
+        public virtual void SendMail(BaseMail mail)
         {
             var m = CreateMessage(mail);
             client.Send(m);
         }
 
-        protected MailMessage CreateMessage(BaseMail mailInfo)
+        protected virtual MailMessage CreateMessage(BaseMail mailInfo)
         {
             MailMessage mail = new MailMessage();
             mail.BodyEncoding = Encoding.UTF8;
