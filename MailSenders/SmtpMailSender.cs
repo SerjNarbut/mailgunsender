@@ -6,9 +6,9 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MailgunSender
+namespace MailgunSender.MailSenders
 {
-    public class MailSender : MailgunSender.IMailSender
+    public class SmtpMailSender : IMailSender
     {
         protected SmtpClient client;
 

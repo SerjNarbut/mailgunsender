@@ -1,6 +1,6 @@
 ﻿using MailgunSender.Models;
 using System;
-namespace MailgunSender
+namespace MailgunSender.MailSenders
 {
     public interface IMailSender
     {
