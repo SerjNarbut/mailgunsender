@@ -23,7 +23,7 @@ namespace MailgunSender.MailSenders
             client.Execute(CreateMessage(mail));
         }
 
-        protected override RestRequest CreateMessage(Models.BaseMail mail)
+        protected virtual RestRequest CreateMessage(Models.BaseMail mail)
         {
             RestRequest request = new RestRequest();
             request.AddParameter("domain", Domain, ParameterType.UrlSegment);

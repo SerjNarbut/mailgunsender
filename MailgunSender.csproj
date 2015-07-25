@@ -43,14 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\MailgunHttpElement.cs" />
     <Compile Include="Config\MailgunMailSection.cs" />
     <Compile Include="Config\MailgunSmtpElement.cs" />
+    <Compile Include="Errors\UnknowMessengerType.cs" />
+    <Compile Include="Factories\HttpMailFactory.cs" />
     <Compile Include="Factories\IMailFactory.cs" />
     <Compile Include="Factories\SmtpMailFactory.cs" />
+    <Compile Include="MailGun.cs" />
     <Compile Include="MailSenders\HttpMailSender.cs" />
     <Compile Include="MailSenders\IMailSender.cs" />
     <Compile Include="MailSenders\SmtpMailSender.cs" />
     <Compile Include="Models\BaseMail.cs" />
+    <Compile Include="Models\FactoryType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

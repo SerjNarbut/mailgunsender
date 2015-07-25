@@ -17,15 +17,6 @@ namespace MailgunSender.Factories
         public string Login { get; set; }
         public string Password { get; set; }
 
-        public SmtpMailFactory()
-        {
-            var config = ConfigurationManager.GetSection("mailgun") as MailgunMailSection;
-            Host = config.Smtp.Host;
-            Port = config.Smtp.Port;
-            Login = config.Smtp.Login;
-            Password = config.Smtp.Password;
-        }
-
         public IMailSender CreateSender()
         {
             var sender = new SmtpMailSender();
