@@ -8,7 +8,7 @@ namespace MailgunSender.Errors
 {
     public class UnknowMessengerType : Exception
     {
-        public UnknowMessengerType(string wrongType) :  base(String.Format("Unknow messenger type: {0}. Supports only http or smtp", wrongType))
+        public UnknowMessengerType(string wrongType, string types) :  base(String.Format("Unknow messenger type: {0}. Supports only {1}", wrongType, types))
         {
            
         }

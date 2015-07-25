@@ -16,8 +16,6 @@ namespace MailgunSender
     {
         private static MailgunMailSection Config { get; set; }
 
-        public static FactoryType Type { get; private set; }
-
         public static IMailFactory Factory { get; private set; }
 
         private static Dictionary<string, Func<MailgunMailSection, IMailFactory>> types
@@ -33,7 +31,15 @@ namespace MailgunSender
             {
                 throw new ArgumentNullException("builder for Factory canntp be null");
             }
-            types.Add(name.ToLower(), builder);
+            var key = name.ToLower();
+            if (types.ContainsKey(key))
+            {
+                types[key] = builder;
+            }
+            else
+            {
+                types.Add(name.ToLower(), builder);
+            }
         }
 
         public static void Configure()
@@ -59,17 +65,12 @@ namespace MailgunSender
             });
 
             Config = ConfigurationManager.GetSection("mailgun") as MailgunMailSection;
-            if (Config.Type.ToLower().Equals("smtp"))
+
+            var type = Config.Type.ToLower();
+
+            if (!types.ContainsKey(type))
             {
-                Type = FactoryType.Smtp;
-            }
-            else if (Config.Type.ToLower().Equals("http"))
-            {
-                Type = FactoryType.Http;
-            }
-            else
-            {
-                throw new UnknowMessengerType(Config.Type);
+                throw new UnknowMessengerType(type, String.Join(" or ", types.Keys.ToArray()));
             }
 
             Factory = types[Config.Type.ToLower()].Invoke(Config);
