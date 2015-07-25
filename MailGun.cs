@@ -20,8 +20,44 @@ namespace MailgunSender
 
         public static IMailFactory Factory { get; private set; }
 
+        private static Dictionary<string, Func<MailgunMailSection, IMailFactory>> types
+            = new Dictionary<string, Func<MailgunMailSection, IMailFactory>>();
+
+        public static void RegisterFactory(string name, Func<MailgunMailSection, IMailFactory> builder)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Factory name cannot be null");
+            }
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder for Factory canntp be null");
+            }
+            types.Add(name.ToLower(), builder);
+        }
+
         public static void Configure()
         {
+
+            RegisterFactory("smtp", c => 
+            {
+                SmtpMailFactory factory = new SmtpMailFactory();
+                factory.Host = c.Smtp.Host;
+                factory.Port = c.Smtp.Port;
+                factory.Login = c.Smtp.Login;
+                factory.Password = c.Smtp.Password;
+                return factory;
+            });
+
+            RegisterFactory("http", c =>
+            {
+                HttpMailFactory factory = new HttpMailFactory();
+                factory.ApiKey = c.Http.ApiKey;
+                factory.Domain = c.Http.Domain;
+                factory.Url = c.Http.Url;
+                return factory;
+            });
+
             Config = ConfigurationManager.GetSection("mailgun") as MailgunMailSection;
             if (Config.Type.ToLower().Equals("smtp"))
             {
@@ -36,25 +72,7 @@ namespace MailgunSender
                 throw new UnknowMessengerType(Config.Type);
             }
 
-
-            if (Type == FactoryType.Smtp)
-            {
-                SmtpMailFactory factory = new SmtpMailFactory();
-                factory.Host = Config.Smtp.Host;
-                factory.Port = Config.Smtp.Port;
-                factory.Login = Config.Smtp.Login;
-                factory.Password = Config.Smtp.Password;
-                Factory = factory;
-            }
-            else if (Type == FactoryType.Http)
-            {
-                HttpMailFactory factory = new HttpMailFactory();
-                factory.ApiKey = Config.Http.ApiKey;
-                factory.Domain = Config.Http.Domain;
-                factory.Url = Config.Http.Url;
-                Factory = factory;
-            }
-
+            Factory = types[Config.Type.ToLower()].Invoke(Config);
         }
 
         public static IMailSender GetSender()
